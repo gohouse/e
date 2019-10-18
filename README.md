@@ -54,7 +54,9 @@ import (
 )
 
 func main() {
-	err := testError()
+	var err e.E
+	// 或者 var err e.Error
+	err = testError()
 
 	fmt.Println("error msg:", err.Error())
 	fmt.Println("error stack:", err.Stack())
