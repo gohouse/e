@@ -25,8 +25,6 @@ func New(arg string) Error {
 	}
 	funcName, file, line, ok := runtime.Caller(1)
 	if (ok) {
-		//return errors.New(fmt.Sprintf("msg=%s file=%s line=%v funcName=%s",
-		//	arg, file, line, runtime.FuncForPC(funcName).Name()))
 		err.Stack = Stack{
 			File:     file,
 			Line:     line,
