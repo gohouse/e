@@ -34,7 +34,7 @@ file: /go/src/github.com/demo/e.go
 line: 9
 func name: main.main
 
-e.Error{Msg:"only show a custom errors demo", Stack:e.Stack{File:"/Users/fizz/go/src/github.com/gohouse/demo/e.go", Line:9, FuncName:"main.main"}}
+e.Error{Msg:"only show a custom errors demo", Stack:e.Stack{File:"/go/src/github.com/demo/e.go", Line:9, FuncName:"main.main"}}
 ```
 
 ## 转换为原生error
