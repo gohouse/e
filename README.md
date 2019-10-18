@@ -9,10 +9,14 @@ go get github.com/gohouse/e
 
 ## 使用
 
-### 转换为原生error
+### 生成一个错误
+1.标准生成
+```go
+err := e.New("这是错误信息")
 ```
-var err2 error
-err2 = e.New(xxx).ToError()
+2. 附带接受原始错误的返回
+```go
+err := e.NewWithError("这是错误信息", error.New("这是原生错误信息"))
 ```
 
 ### 获取错误信息
@@ -22,10 +26,20 @@ err.Error()
 
 ### 获取错误堆栈信息
 ```go
+// 获取堆栈对象
 errorStack := err.Stack()
+// 获取错误的文件
 errorStack.File
+// 获取错误的文件行号
 errorStack.Line
+// 获取错误的方法名
 errorStack.FuncName
+```
+
+### 转换为原生error
+```
+var err2 error
+err2 = e.New(xxx).ToError()
 ```
 
 ### 完整示例
@@ -61,5 +75,5 @@ error file: /Users/fizz/go/src/github.com/gohouse/demo/e_demo/e.go
 error line: 21
 error func name: main.testError
 
-e.Error{Msg:"only show a custom errors demo", Stack:e.Stack{Line:9, FuncName:"main.main", File:"/go/src/github.com/demo/e.go"}}
+e.Error{Msg:"only show a custom errors demo", Stack:e.Stack{Line:21, FuncName:"main.main", File:"/go/src/github.com/demo/e.go"}}
 ```
