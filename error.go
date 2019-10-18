@@ -6,8 +6,8 @@ import (
 )
 
 type E interface {
+	error
 	ToError() error
-	Error() string
 }
 type Stack struct {
 	File     string
