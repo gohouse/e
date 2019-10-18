@@ -8,6 +8,27 @@ go get github.com/gohouse/e
 ```
 
 ## 使用
+
+### 转换为原生error
+```
+var err2 error
+err2 = e.New(xxx).ToError()
+```
+
+### 获取错误信息
+```go
+err.Error()
+```
+
+### 获取错误堆栈信息
+```go
+errorStack := err.Stack()
+errorStack.File
+errorStack.Line
+errorStack.FuncName
+```
+
+### 完整示例
 ```go
 package main
 
@@ -17,35 +38,28 @@ import (
 )
 
 func main() {
-	err := e.New("only show a custom errors demo")
+	err := testError()
 
-	fmt.Println("msg:",err.Msg)
-	fmt.Println("file:",err.Stack.File)
-	fmt.Println("line:",err.Stack.Line)
-	fmt.Println("func name:",err.Stack.FuncName)
-	
-	fmt.Printf("%#v",err)
+	fmt.Println("error msg:", err.Error())
+	fmt.Println("error stack:", err.Stack())
+	fmt.Println("error file:", err.Stack().File)
+	fmt.Println("error line:", err.Stack().Line)
+	fmt.Println("error func name:", err.Stack().FuncName)
+
+	fmt.Printf("%#v", err)
+}
+
+func testError() e.Error {
+	return e.New("only show a custom errors demo")
 }
 ```
 输出
 ```bash
-msg: only show a custom errors demo
-file: /go/src/github.com/demo/e.go
-line: 9
-func name: main.main
+error msg: only show a custom errors demo
+error stack: {21 main.testError /go/src/github.com/gohouse/demo/e.go}
+error file: /Users/fizz/go/src/github.com/gohouse/demo/e_demo/e.go
+error line: 21
+error func name: main.testError
 
 e.Error{Msg:"only show a custom errors demo", Stack:e.Stack{Line:9, FuncName:"main.main", File:"/go/src/github.com/demo/e.go"}}
-```
-
-## 转换为原生error
-```
-var err2 error
-err2 = e.New(xxx).ToError()
-```
-
-## 获取错误信息
-```go
-err.Error()
-// 或者
-err.Msg
 ```
