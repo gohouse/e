@@ -8,8 +8,8 @@ import (
 
 type E interface {
 	error
-	ToError() error
 	Stack() ErrorStack
+	ToError() error
 }
 type ErrorStack struct {
 	File     string
