@@ -37,8 +37,11 @@ func New(msg string) Error {
 }
 
 func NewWithError(msg string, goErr error) Error {
+	if goErr!=nil {
+		msg = fmt.Sprint(msg, ":", goErr.Error())
+	}
 	var err = Error{
-		msg: fmt.Sprint(msg, ":", goErr.Error()),
+		msg: msg,
 	}
 	if funcName, file, line, ok := runtime.Caller(1); ok {
 		err.stack = ErrorStack{
