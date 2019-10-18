@@ -43,6 +43,15 @@ var err2 error
 err2 = err.ToError()
 // 这里的err就是e.New(xxx), 即e.Error或e.E
 ```
+这里只包含标准错误信息, 不包含stack信息
+
+### 转换为原生error并附带stack信息
+```
+var err2 error
+err2 = err.ToErrorWithStack()
+// 这里的err就是e.New(xxx), 即e.Error或e.E
+```
+这里包含标准错误信息和stack信息,格式为`error.New("标准错误信息; 错误文件:错误行号:错误方法名")`
 
 ### 完整示例
 ```go

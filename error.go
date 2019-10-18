@@ -10,6 +10,7 @@ type E interface {
 	error
 	Stack() ErrorStack
 	ToError() error
+	ToErrorWithStack() error
 }
 type ErrorStack struct {
 	File     string
@@ -56,6 +57,10 @@ func NewWithError(msg string, goErr error) Error {
 
 func (e Error) ToError() error {
 	return errors.New(e.msg)
+}
+
+func (e Error) ToErrorWithStack() error {
+	return errors.New(fmt.Sprintf("%s; %s:%s:%s",e.msg,e.stack.File,e.stack.Line,e.stack.FuncName))
 }
 
 func (e Error) Error() string {
