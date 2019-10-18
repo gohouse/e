@@ -36,3 +36,9 @@ func name: main.main
 
 e.Error{Msg:"only show a custom errors demo", Stack:e.Stack{File:"/Users/fizz/go/src/github.com/gohouse/demo/e.go", Line:9, FuncName:"main.main"}}
 ```
+
+## 转换为原生error
+```
+var err error
+err = e.New(xxx).Error()
+```
