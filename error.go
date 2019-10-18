@@ -1,11 +1,12 @@
 package e
 
 import (
+	"errors"
 	"runtime"
 )
 
 type E interface {
-	Error() interface{}
+	Error() error
 }
 type Stack struct {
 	File     string
@@ -33,4 +34,8 @@ func New(arg string) Error {
 	}
 
 	return err
+}
+
+func (e Error) Error() error {
+	return errors.New(e.Msg)
 }
