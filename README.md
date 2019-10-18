@@ -10,12 +10,12 @@ go get github.com/gohouse/e
 ## 使用
 
 ### 生成一个错误
-- 1. 标准生成
+- 标准生成
 ```go
 err := e.New("这是错误信息")
 ```
 
-- 2. 附带接受原始错误的返回
+- 附带接受原始错误的返回
 ```go
 err := e.NewWithError("这是错误信息", error.New("这是原生错误信息"))
 ```
@@ -40,7 +40,8 @@ errorStack.FuncName
 ### 转换为原生error
 ```
 var err2 error
-err2 = e.New(xxx).ToError()
+err2 = err.ToError()
+// 这里的err就是e.New(xxx), 即e.Error或e.E
 ```
 
 ### 完整示例
