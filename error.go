@@ -6,7 +6,8 @@ import (
 )
 
 type E interface {
-	Error() error
+	ToError() error
+	Error() string
 }
 type Stack struct {
 	File     string
@@ -36,6 +37,10 @@ func New(arg string) Error {
 	return err
 }
 
-func (e Error) Error() error {
+func (e Error) ToError() error {
 	return errors.New(e.Msg)
+}
+
+func (e Error) Error() string {
+	return e.Msg
 }

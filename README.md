@@ -40,5 +40,12 @@ e.Error{Msg:"only show a custom errors demo", Stack:e.Stack{File:"/Users/fizz/go
 ## 转换为原生error
 ```
 var err error
-err = e.New(xxx).Error()
+err = e.New(xxx).ToError()
+```
+
+## 获取错误信息
+```go
+err.Error()
+// 或者
+err.Msg
 ```
