@@ -9,16 +9,16 @@ import (
 type E interface {
 	error
 	ToError() error
-	Stack() Stack
+	Stack() ErrorStack
 }
-type Stack struct {
+type ErrorStack struct {
 	File     string
 	Line     int
 	FuncName string
 }
 type Error struct {
 	msg   string
-	stack Stack
+	stack ErrorStack
 }
 
 func New(msg string) Error {
@@ -27,7 +27,7 @@ func New(msg string) Error {
 	}
 	funcName, file, line, ok := runtime.Caller(1)
 	if (ok) {
-		err.stack = Stack{
+		err.stack = ErrorStack{
 			File:     file,
 			Line:     line,
 			FuncName: runtime.FuncForPC(funcName).Name(),
@@ -43,7 +43,7 @@ func NewWithError(msg string, goErr error) Error {
 	}
 	funcName, file, line, ok := runtime.Caller(1)
 	if (ok) {
-		err.stack = Stack{
+		err.stack = ErrorStack{
 			File:     file,
 			Line:     line,
 			FuncName: runtime.FuncForPC(funcName).Name(),
@@ -61,6 +61,6 @@ func (e Error) Error() string {
 	return e.msg
 }
 
-func (e Error) Stack() Stack {
+func (e Error) Stack() ErrorStack {
 	return e.stack
 }
