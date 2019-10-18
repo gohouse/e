@@ -25,8 +25,7 @@ func New(msg string) Error {
 	var err = Error{
 		msg: msg,
 	}
-	funcName, file, line, ok := runtime.Caller(1)
-	if (ok) {
+	if funcName, file, line, ok := runtime.Caller(1); ok {
 		err.stack = ErrorStack{
 			File:     file,
 			Line:     line,
@@ -41,8 +40,7 @@ func NewWithError(msg string, goErr error) Error {
 	var err = Error{
 		msg: fmt.Sprint(msg, ":", goErr.Error()),
 	}
-	funcName, file, line, ok := runtime.Caller(1)
-	if (ok) {
+	if funcName, file, line, ok := runtime.Caller(1); ok {
 		err.stack = ErrorStack{
 			File:     file,
 			Line:     line,
