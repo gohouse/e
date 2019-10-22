@@ -101,8 +101,8 @@ func testError() e.Error {
 输出
 ```bash
 error msg: only show a custom errors demo
-error stack: {21 main.testError /go/src/github.com/gohouse/demo/e.go}
-error file: /go/src/github.com/gohouse/demo/e_demo/e.go
+error stack: {21 main.testError /go/src/github.com/demo/e.go}
+error file: /go/src/github.com/demo/e.go
 error line: 21
 error func name: main.testError
 
