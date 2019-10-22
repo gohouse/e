@@ -1,7 +1,9 @@
-# e
+
 [![GoDoc](https://godoc.org/github.com/gohouse/e?status.svg)](https://godoc.org/github.com/gohouse/e)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gohouse/e)](https://goreportcard.com/report/github.com/gohouse/e)
 [![GitHub release](https://img.shields.io/github/release/gohouse/e.svg)](https://github.com/gohouse/e/releases/latest)
+
+# e
 
 golang自定义错误包, 可以记录调用位置的具体信息, 包括文件名, 行号, 方法名和错误消息  
 cutome error in golang
