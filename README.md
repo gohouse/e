@@ -17,7 +17,7 @@ go get github.com/gohouse/e
 ## 使用
 
 ### 生成一个错误
-- 标准生成
+- 标准生成返回
 ```go
 err := e.New("这是错误信息")
 ```
@@ -102,7 +102,7 @@ func testError() e.Error {
 ```bash
 error msg: only show a custom errors demo
 error stack: {21 main.testError /go/src/github.com/gohouse/demo/e.go}
-error file: /Users/fizz/go/src/github.com/gohouse/demo/e_demo/e.go
+error file: /go/src/github.com/gohouse/demo/e_demo/e.go
 error line: 21
 error func name: main.testError
 
