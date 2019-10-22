@@ -17,6 +17,8 @@ type ErrorStack struct {
 	funcName string
 }
 
+var _ IErrorStack = (*ErrorStack)(nil)
+
 // NewErrorStack 初始化
 func NewErrorStack() *ErrorStack {
 	return new(ErrorStack)

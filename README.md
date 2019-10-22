@@ -3,6 +3,7 @@ golang自定义错误包, 可以记录调用位置的具体信息, 包括文件�
 cutome error in golang
 
 ## 安装
+
 ```shell
 go get github.com/gohouse/e
 ```
@@ -20,21 +21,32 @@ err := e.New("这是错误信息")
 err := e.NewWithError("这是错误信息", error.New("这是原生错误信息"))
 ```
 
-### 获取错误信息
+### 获取原生标准错误信息
 ```go
 err.Error()
+```
+
+### 获取错误信息包括堆栈
+```go
+err.ErrorWithStack()
 ```
 
 ### 获取错误堆栈信息
 ```go
 // 获取堆栈对象
 errorStack := err.Stack()
+
 // 获取错误的文件
-errorStack.File
+errorStack.GetFile()
+// 或者 err.GetFile()
+
 // 获取错误的文件行号
-errorStack.Line
+errorStack.GetLine()
+// 或者 err.GetLine()
+
 // 获取错误的方法名
-errorStack.FuncName
+errorStack.GetFuncName()
+// 或者 err.GetFuncName()
 ```
 
 ### 转换为原生error
