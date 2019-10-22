@@ -8,11 +8,11 @@ import (
 
 func _print(t *testing.T, err Error) {
 	t.Log("msg:", err.Error())
-	_print_stack(t, err.Stack())
+	_printStack(t, err.Stack())
 	fmt.Printf("%#v\n", err)
 }
 
-func _print_stack(t *testing.T, stack ErrorStack) {
+func _printStack(t *testing.T, stack ErrorStack) {
 	t.Log("file:", stack.GetFuncName())
 	t.Log("line:", stack.GetLine())
 	t.Log("func name:", stack.GetFuncName())
@@ -46,7 +46,7 @@ func TestError_ErrorWithStack(t *testing.T) {
 
 func TestError_Stack(t *testing.T) {
 	err := New("only show a custom errors demo")
-	_print_stack(t, err.Stack())
+	_printStack(t, err.Stack())
 }
 
 func TestError_ToError(t *testing.T) {
