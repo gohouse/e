@@ -6,25 +6,29 @@ import (
 	"testing"
 )
 
+func _print(t *testing.T, err Error) {
+	t.Log("msg:", err.Error())
+	_print_stack(t, err.Stack())
+	fmt.Printf("%#v\n", err)
+}
+
+func _print_stack(t *testing.T, stack ErrorStack) {
+	t.Log("file:", stack.GetFuncName())
+	t.Log("line:", stack.GetLine())
+	t.Log("func name:", stack.GetFuncName())
+}
+
 func TestNew(t *testing.T) {
 	err := New("only show a custom errors demo")
 
-	t.Log("msg:",err.Error())
-	t.Log("file:",err.Stack().File)
-	t.Log("line:",err.Stack().Line)
-	t.Log("func name:",err.Stack().FuncName)
-	fmt.Printf("%#v",err)
+	_print(t, err)
 }
 
 func TestNewWithError(t *testing.T) {
 	goErr := errors.New("这是官方标准错误")
 	err := NewWithError("手动添加的错误", goErr)
 
-	t.Log("msg:",err.Error())
-	t.Log("file:",err.Stack().File)
-	t.Log("line:",err.Stack().Line)
-	t.Log("func name:",err.Stack().FuncName)
-	fmt.Printf("%#v",err)
+	_print(t, err)
 }
 
 func TestError_Error(t *testing.T) {
@@ -33,4 +37,32 @@ func TestError_Error(t *testing.T) {
 	t.Log(err.Error())
 }
 
+func TestError_ErrorWithStack(t *testing.T) {
+	goErr := errors.New("这是官方标准错误")
+	err := NewWithError("手动添加的错误", goErr)
 
+	t.Log(err.Error())
+}
+
+func TestError_Stack(t *testing.T) {
+	err := New("only show a custom errors demo")
+	_print_stack(t, err.Stack())
+}
+
+func TestError_ToError(t *testing.T) {
+	err := New("only show a custom errors demo")
+	errOrigin := err.ToError()
+
+	if errOrigin != nil {
+		t.Log(errOrigin.Error())
+	}
+}
+
+func TestError_ToErrorWithStack(t *testing.T) {
+	err := New("only show a custom errors demo")
+	errOrigin := err.ToErrorWithStack()
+
+	if errOrigin != nil {
+		t.Log(errOrigin.Error())
+	}
+}

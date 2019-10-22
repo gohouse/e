@@ -6,67 +6,55 @@ import (
 	"runtime"
 )
 
-type E interface {
-	error
-	Stack() ErrorStack
-	ToError() error
-	ToErrorWithStack() error
-}
-type ErrorStack struct {
-	File     string
-	Line     int
-	FuncName string
-}
 type Error struct {
-	msg   string
-	stack ErrorStack
+	*ErrorStack
+	msg string
 }
 
 func New(msg string) Error {
-	var err = Error{
-		msg: msg,
-	}
-	if funcName, file, line, ok := runtime.Caller(1); ok {
-		err.stack = ErrorStack{
-			File:     file,
-			Line:     line,
-			FuncName: runtime.FuncForPC(funcName).Name(),
-		}
-	}
-
-	return err
+	var err = new(Error)
+	err.msg = msg
+	return err.resolveCaller()
 }
 
 func NewWithError(msg string, goErr error) Error {
-	if goErr!=nil {
+	var err = new(Error)
+	if goErr != nil {
 		msg = fmt.Sprint(msg, ":", goErr.Error())
 	}
-	var err = Error{
-		msg: msg,
-	}
-	if funcName, file, line, ok := runtime.Caller(1); ok {
-		err.stack = ErrorStack{
-			File:     file,
-			Line:     line,
-			FuncName: runtime.FuncForPC(funcName).Name(),
-		}
-	}
+	err.msg = msg
+	return err.resolveCaller()
+}
 
+func (err Error) resolveCaller() Error {
+	if funcName, file, line, ok := runtime.Caller(2); ok {
+		err.ErrorStack = NewErrorStack()
+		err.SetFile(file)
+		err.SetLine(line)
+		err.SetFuncName(runtime.FuncForPC(funcName).Name())
+	}
 	return err
 }
 
-func (e Error) ToError() error {
-	return errors.New(e.msg)
+func (err Error) ToError() error {
+	return errors.New(err.msg)
 }
 
-func (e Error) ToErrorWithStack() error {
-	return errors.New(fmt.Sprintf("%s; %s:%s:%s",e.msg,e.stack.File,e.stack.Line,e.stack.FuncName))
+func (err Error) ToErrorWithStack() error {
+	return errors.New(err.ErrorWithStack())
 }
 
-func (e Error) Error() string {
-	return e.msg
+func (err Error) Error() string {
+	return err.msg
 }
 
-func (e Error) Stack() ErrorStack {
-	return e.stack
+func (err Error) ErrorWithStack() string {
+	return fmt.Sprintf("%s; %s:%v:%s",
+		err.msg,
+		err.GetFile(),
+		err.GetLine(),
+		err.GetFuncName())
+}
+func (err Error) Stack() ErrorStack {
+	return *err.ErrorStack
 }
