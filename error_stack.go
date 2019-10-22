@@ -1,6 +1,6 @@
 package e
 
-// IErrorStack
+// IErrorStack 定义接口
 type IErrorStack interface {
 	SetFile(arg string)
 	GetFile() string
@@ -10,44 +10,44 @@ type IErrorStack interface {
 	GetFuncName() string
 }
 
-// ErrorStack
+// ErrorStack 定义结构体
 type ErrorStack struct {
 	file     string
 	line     int
 	funcName string
 }
 
-// NewErrorStack
+// NewErrorStack 初始化
 func NewErrorStack() *ErrorStack {
 	return new(ErrorStack)
 }
 
-// SetFile arg type:string
+// SetFile 设置该字段值
 func (o *ErrorStack) SetFile(arg string) {
 	o.file = arg
 }
 
-// GetFile
+// GetFile 获取该字段值
 func (o *ErrorStack) GetFile() string {
 	return o.file
 }
 
-// SetLine arg type:int
+// SetLine 设置该字段值
 func (o *ErrorStack) SetLine(arg int) {
 	o.line = arg
 }
 
-// GetLine
+// GetLine 获取该字段值
 func (o *ErrorStack) GetLine() int {
 	return o.line
 }
 
-// SetFuncName arg type:string
+// SetFuncName 设置该字段值
 func (o *ErrorStack) SetFuncName(arg string) {
 	o.funcName = arg
 }
 
-// GetFuncName
+// GetFuncName 获取该字段值
 func (o *ErrorStack) GetFuncName() string {
 	return o.funcName
 }
