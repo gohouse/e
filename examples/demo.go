@@ -24,5 +24,5 @@ func test2() e.Error {
 }
 
 func test3() e.Error {
-	return e.New("xxxxxxx")
+	return e.New("xxxxxxx", 3)
 }

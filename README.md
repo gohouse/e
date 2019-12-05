@@ -26,8 +26,8 @@ go get github.com/gohouse/e
 - 标准生成返回
 ```go
 err := e.New("这是错误信息")
-// 可选第二个参数,设置记录堆栈层数,默认2层
-//err := e.New("这是错误信息", 1)
+// 可选第二个参数,设置记录堆栈层数,默认1层
+//err := e.New("这是错误信息", 2)
 ```
 
 - 附带接受原始错误的返回
@@ -83,18 +83,20 @@ error msg: only show a custom errors demo
 ```
 error stack
 ```shell script
-error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError} {/go/src/github.com/gohouse/e/examples/demo.go 11 main.main} {/usr/local/go/src/runtime/proc.go 203 runtime.main}]
+error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError}]
 ```
 error with stack
 ```shell script
-error with stack: only show a custom errors demo, [/go/src/github.com/gohouse/e/examples/demo.go:21, main.testError], [/go/src/github.com/gohouse/e/examples/demo.go:11, main.main], [/usr/local/go/src/runtime/proc.go:203, runtime.main]
+error with stack: only show a custom errors demo, [/go/src/github.com/gohouse/e/examples/demo.go:21, main.testError]
 ```
 
-> 说明:默认是记录3下层堆栈的信息,如果想要自定义堆栈层数,只需要在第二个参数设置对应数量即可,如:  
+> 说明: 为了节约内存占用,默认是记录1层堆栈的信息,如果想要更多堆栈层数,只需要在第二个参数设置对应数量即可,如:  
 ```shell script
- err := e.New("错误了啦 xxx", 1)
+func testError() e.Error {
+	return e.New("错误了啦 xxx", 3)
+}
 ```
 `err`会记录1层堆栈信息,对应的 stack 为:
 ```shell script
-error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError}]
+error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError} {/go/src/github.com/gohouse/e/examples/demo.go 11 main.main} {/usr/local/go/src/runtime/proc.go 203 runtime.main}]
 ```

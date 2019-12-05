@@ -9,7 +9,7 @@ import (
 // New returns an error that formats as the given text.
 // Each call to New returns a distinct error value even if the text is identical.
 func New(text string, depth ...int) *errorString {
-	var dp = 2
+	var dp = 1
 	if len(depth) > 0 {
 		dp = depth[0]
 	}
