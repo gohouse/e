@@ -13,8 +13,8 @@ func _print(t *testing.T, err Error) {
 }
 
 func _printStack(t *testing.T, stack ErrorStack) {
-	for _,item:= range stack{
-		t.Log(fmt.Sprintf("%s,%s:%v", item.FuncName,item.File,item.Line))
+	for _, item := range stack {
+		t.Log(fmt.Sprintf("%s,%s:%v", item.FuncName, item.File, item.Line))
 	}
 }
 

@@ -1,5 +1,6 @@
 package e
 
+// StackObject ...
 type StackObject struct {
 	File     string
 	Line     int
