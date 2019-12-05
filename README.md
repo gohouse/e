@@ -10,6 +10,12 @@ cutome error in golang
 
 ## 安装
 
+- go mod 
+```shell script
+require github.com/gohouse/e master
+```
+
+- go get
 ```shell
 go get github.com/gohouse/e
 ```
@@ -20,6 +26,8 @@ go get github.com/gohouse/e
 - 标准生成返回
 ```go
 err := e.New("这是错误信息")
+// 可选第二个参数,设置记录堆栈层数,默认2层
+//err := e.New("这是错误信息", 1)
 ```
 
 - 附带接受原始错误的返回
@@ -37,39 +45,11 @@ err.Error()
 err.ErrorWithStack()
 ```
 
-### 获取错误堆栈信息
+### 获取错误堆栈对象`e.ErrorStack`
 ```go
 // 获取堆栈对象
 errorStack := err.Stack()
-
-// 获取错误的文件
-errorStack.GetFile()
-// 或者 err.GetFile()
-
-// 获取错误的文件行号
-errorStack.GetLine()
-// 或者 err.GetLine()
-
-// 获取错误的方法名
-errorStack.GetFuncName()
-// 或者 err.GetFuncName()
 ```
-
-### 转换为原生error
-```
-var err2 error
-err2 = err.ToError()
-// 这里的err就是e.New(xxx), 即e.Error或e.E
-```
-这里只包含标准错误信息, 不包含stack信息
-
-### 转换为原生error并附带stack信息
-```
-var err2 error
-err2 = err.ToErrorWithStack()
-// 这里的err就是e.New(xxx), 即e.Error或e.E
-```
-这里包含标准错误信息和stack信息,格式为`error.New("标准错误信息; 错误文件:错误行号:错误方法名")`
 
 ### 完整示例
 ```go
@@ -81,30 +61,40 @@ import (
 )
 
 func main() {
-	var err e.E
+	var err e.Error
 	// 或者 var err e.Error
 	err = testError()
 
 	fmt.Println("error msg:", err.Error())
 	fmt.Println("error stack:", err.Stack())
-	fmt.Println("error file:", err.Stack().File)
-	fmt.Println("error line:", err.Stack().Line)
-	fmt.Println("error func name:", err.Stack().FuncName)
+	fmt.Println("error with stack:", err.ErrorWithStack())
 
 	fmt.Printf("%#v", err)
 }
 
 func testError() e.Error {
-	return e.New("only show a custom errors demo")
+	return e.New("only show a custom errors demo", 3)
 }
 ```
-输出
+输出:  
+error msg
 ```bash
 error msg: only show a custom errors demo
-error stack: {21 main.testError /go/src/github.com/demo/e.go}
-error file: /go/src/github.com/demo/e.go
-error line: 21
-error func name: main.testError
+```
+error stack
+```shell script
+error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError} {/go/src/github.com/gohouse/e/examples/demo.go 11 main.main} {/usr/local/go/src/runtime/proc.go 203 runtime.main}]
+```
+error with stack
+```shell script
+error with stack: only show a custom errors demo, [/go/src/github.com/gohouse/e/examples/demo.go:21, main.testError], [/go/src/github.com/gohouse/e/examples/demo.go:11, main.main], [/usr/local/go/src/runtime/proc.go:203, runtime.main]
+```
 
-e.Error{Msg:"only show a custom errors demo", Stack:e.Stack{Line:21, FuncName:"main.main", File:"/go/src/github.com/demo/e.go"}}
+> 说明:默认是记录3下层堆栈的信息,如果想要自定义堆栈层数,只需要在第二个参数设置对应数量即可,如:  
+```shell script
+ err := e.New("错误了啦 xxx", 1)
+```
+`err`会记录1层堆栈信息,对应的 stack 为:
+```shell script
+error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError}]
 ```

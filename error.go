@@ -1,69 +1,72 @@
+// because the former will succeed if err wraps an *os.PathError.
 package e
 
 import (
-	"errors"
 	"fmt"
 	"runtime"
 )
 
-// Error 错误主结构体
-type Error struct {
-	*ErrorStack
-	msg string
+// New returns an error that formats as the given text.
+// Each call to New returns a distinct error value even if the text is identical.
+func New(text string, depth ...int) *errorString {
+	var dp = 2
+	if len(depth) > 0 {
+		dp = depth[0]
+	}
+	err := &errorString{msg: text, ErrorStack: NewErrorStack(), depth: dp}
+	return err.resolveCaller()
 }
 
-// New 初始化错误
-func New(msg string) Error {
-	var err = new(Error)
-	err.msg = msg
-	return err.resolveCaller()
+// errorString is a trivial implementation of error.
+type errorString struct {
+	ErrorStack
+	msg   string
+	depth int
 }
 
 // NewWithError 初始化错误,并且可以附加原始错误
-func NewWithError(msg string, goErr error) Error {
-	var err = new(Error)
+func NewWithError(msg string, goErr error, depth ...int) *errorString {
 	if goErr != nil {
 		msg = fmt.Sprint(msg, ":", goErr.Error())
 	}
-	err.msg = msg
-	return err.resolveCaller()
+	return New(msg, depth...)
 }
 
-func (err Error) resolveCaller() Error {
-	if funcName, file, line, ok := runtime.Caller(2); ok {
-		err.ErrorStack = NewErrorStack()
-		err.SetFile(file)
-		err.SetLine(line)
-		err.SetFuncName(runtime.FuncForPC(funcName).Name())
+func (err *errorString) resolveCaller() *errorString {
+	// 取三层
+	var i = 0
+	for i < err.depth {
+		if funcName, file, line, ok := runtime.Caller(i + 2); ok {
+			var obj = StackObject{
+				File:     file,
+				Line:     line,
+				FuncName: runtime.FuncForPC(funcName).Name(),
+			}
+			err.ErrorStack = append(err.ErrorStack, obj)
+			i++
+		} else {
+			break
+		}
 	}
 	return err
 }
 
-// ToError 转换为官方原始错误, 只包含错误信息, 不包含错误堆栈信息
-func (err Error) ToError() error {
-	return errors.New(err.msg)
-}
-
-// ToErrorWithStack 跟 func (err Error) ToError() error 类似, 包含自定义错误信息和错误堆栈信息
-func (err Error) ToErrorWithStack() error {
-	return errors.New(err.ErrorWithStack())
-}
-
 // Error 实现了官方的错误, 跟官方用法一致, 直接返回错误信息, 不包含错误堆栈信息
-func (err Error) Error() string {
+func (err *errorString) Error() string {
 	return err.msg
 }
 
-// ErrorWithStack 跟 func (err Error) Error() string 类似, 包含自定义错误信息和错误堆栈信息
-func (err Error) ErrorWithStack() string {
-	return fmt.Sprintf("%s; %s:%v:%s",
-		err.msg,
-		err.GetFile(),
-		err.GetLine(),
-		err.GetFuncName())
+// ErrorWithStack 跟 func (err *errorString) Error() string 类似, 包含自定义错误信息和错误堆栈信息
+func (err *errorString) ErrorWithStack() string {
+	var msg = err.msg
+	for _, item := range err.ErrorStack {
+		msg = fmt.Sprintf("%s, [%s:%v, %s]", msg, item.File, item.Line, item.FuncName)
+	}
+
+	return msg
 }
 
 // Stack 获取错误的具体堆栈信息
-func (err Error) Stack() ErrorStack {
-	return *err.ErrorStack
+func (err *errorString) Stack() ErrorStack {
+	return err.ErrorStack
 }

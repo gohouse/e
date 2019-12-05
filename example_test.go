@@ -7,7 +7,7 @@ import (
 
 func ExampleNew() {
 	var err Error
-	err = New("这是自定义错误信息")
+	err = New("这是自定义错误信息", 1)
 	fmt.Println(err)
 }
 
@@ -34,8 +34,5 @@ func ExampleError_ErrorWithStack() {
 func ExampleError_Stack() {
 	var err Error
 	err = New("这是自定义错误信息")
-	fmt.Println("错误堆栈信息:", err.Stack())
-	fmt.Println("错误堆栈信息-文件名:", err.GetFile())
-	fmt.Println("错误堆栈信息-行号:", err.GetLine())
-	fmt.Println("错误堆栈信息-方法名:", err.GetFuncName())
+	fmt.Println("错误堆栈对象:", err.Stack())
 }

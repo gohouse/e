@@ -13,9 +13,9 @@ func _print(t *testing.T, err Error) {
 }
 
 func _printStack(t *testing.T, stack ErrorStack) {
-	t.Log("file:", stack.GetFuncName())
-	t.Log("line:", stack.GetLine())
-	t.Log("func name:", stack.GetFuncName())
+	for _,item:= range stack{
+		t.Log(fmt.Sprintf("%s,%s:%v", item.FuncName,item.File,item.Line))
+	}
 }
 
 func TestNew(t *testing.T) {
@@ -47,22 +47,4 @@ func TestError_ErrorWithStack(t *testing.T) {
 func TestError_Stack(t *testing.T) {
 	err := New("only show a custom errors demo")
 	_printStack(t, err.Stack())
-}
-
-func TestError_ToError(t *testing.T) {
-	err := New("only show a custom errors demo")
-	errOrigin := err.ToError()
-
-	if errOrigin != nil {
-		t.Log(errOrigin.Error())
-	}
-}
-
-func TestError_ToErrorWithStack(t *testing.T) {
-	err := New("only show a custom errors demo")
-	errOrigin := err.ToErrorWithStack()
-
-	if errOrigin != nil {
-		t.Log(errOrigin.Error())
-	}
 }
