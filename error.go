@@ -10,18 +10,14 @@ import (
 // Each call to New returns a distinct error value even if the text is identical.
 func New(text string, depth ...int) *errorString {
 	var dp = 1
+	if NewConfig().GetLayer() > 0 {
+		dp = NewConfig().GetLayer()
+	}
 	if len(depth) > 0 {
 		dp = depth[0]
 	}
 	err := &errorString{msg: text, ErrorStack: NewErrorStack(), depth: dp}
 	return err.resolveCaller()
-}
-
-// errorString is a trivial implementation of error.
-type errorString struct {
-	ErrorStack
-	msg   string
-	depth int
 }
 
 // NewWithError 初始化错误,并且可以附加原始错误
@@ -30,6 +26,13 @@ func NewWithError(msg string, goErr error, depth ...int) *errorString {
 		msg = fmt.Sprint(msg, ":", goErr.Error())
 	}
 	return New(msg, depth...)
+}
+
+// errorString is a trivial implementation of error.
+type errorString struct {
+	ErrorStack
+	msg   string
+	depth int
 }
 
 func (err *errorString) resolveCaller() *errorString {
