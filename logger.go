@@ -17,7 +17,7 @@ func Log(fileNames ...string) HandlerFunc {
 			fmt.Println(err)
 		}
 		//write to the file
-		_, err = fmt.Fprint(f, time.Now().Format("2006-01-02 15:04:05"), ctx.ErrorWithStack(), "--------------------------------------------------\n")
+		_, err = fmt.Fprint(f, time.Now().Format("[2006-01-02 15:04:05] "), ctx.ErrorWithStack(), "--------------------------------------------------\n")
 		if err != nil {
 			panic(err.Error())
 		}
