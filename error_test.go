@@ -12,7 +12,7 @@ func _print(t *testing.T, err Error) {
 	fmt.Printf("%#v\n", err)
 }
 
-func _printStack(t *testing.T, stack ErrorStack) {
+func _printStack(t *testing.T, stack ErrorStackChain) {
 	for _, item := range stack {
 		t.Log(fmt.Sprintf("%s,%s:%v", item.FuncName, item.File, item.Line))
 	}

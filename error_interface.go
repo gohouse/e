@@ -1,8 +1,8 @@
 package e
 
-// E 错误包的接口定义
+// Error 错误包的接口定义
 type Error interface {
 	error
-	Stack() ErrorStack
+	Stack() ErrorStackChain
 	ErrorWithStack() string
 }

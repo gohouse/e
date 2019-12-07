@@ -1,16 +1,16 @@
 package e
 
 // StackObject ...
-type StackObject struct {
+type ErrorStack struct {
 	File     string
 	Line     int
 	FuncName string
 }
 
 // ErrorStack 定义结构体
-type ErrorStack []StackObject
+type ErrorStackChain []ErrorStack
 
 // NewErrorStack 初始化
-func NewErrorStack() ErrorStack {
-	return []StackObject{}
+func NewErrorStackChain() ErrorStackChain {
+	return ErrorStackChain{}
 }
