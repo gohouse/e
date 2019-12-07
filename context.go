@@ -38,9 +38,10 @@ func (ctx *ErrorContext) handleHandlerFunc() {
 	}
 }
 func (ctx *ErrorContext) resolveCaller() {
-	// 取三层
+	// 根据设定获取错误堆栈信息
 	var i = 0
 	for i < ctx.depth {
+		// 这里+2是因为,函数调用从封装的函数开始,如果我直接在 main 方法写这个 caller,就是1了
 		if funcName, file, line, ok := runtime.Caller(i + 2); ok {
 			var obj = ErrorStack{
 				File:     file,
@@ -49,7 +50,7 @@ func (ctx *ErrorContext) resolveCaller() {
 			}
 			ctx.errorStacks = append(ctx.errorStacks, obj)
 			i++
-		} else {
+		} else { // 如果堆栈层数没有这么多,就直接中断,不需要再继续获取了
 			break
 		}
 	}
@@ -68,7 +69,7 @@ func (ctx *ErrorContext) ErrorWithStack() string {
 		msg = fmt.Sprintf("%s\n%s\n    %s:%v", msg, item.FuncName, item.File, item.Line)
 	}
 
-	return fmt.Sprint(msg,"\n")
+	return fmt.Sprint(msg, "\n")
 }
 
 // Stack 获取错误的具体堆栈信息
