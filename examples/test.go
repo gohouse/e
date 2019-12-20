@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	e.NewErrorContext().Use(e.Log("xxx.log")).Setlayer(3)
+	e.NewErrorContext().Use(e.LogFile("xxx.log")).Setlayer(3)
 	test111()
 }
 

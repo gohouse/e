@@ -100,3 +100,62 @@ func testError() e.Error {
 ```shell script
 error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError} {/go/src/github.com/gohouse/e/examples/demo.go 11 main.main} {/usr/local/go/src/runtime/proc.go 203 runtime.main}]
 ```
+
+## 中间件
+我们可以对日志添加中间件,比如做持久化处理,或者打印控制台等
+```go
+// 使用自带的 log 中间件,并设置默认获取错误堆栈层数为3
+e.NewErrorContext().Use(e.Log("errors.log")).Setlayer(3)
+e.New("3层错误堆栈测试,并持久化到 errors.log 文件")
+```
+`e.Log()`中间件代码如下
+```go
+
+func Log(fileNames ...string) HandlerFunc {
+	return func(ctx *ErrorContext) {
+		var fileName = "./error-statck.log"
+		if len(fileNames) > 0 {
+			fileName = fileNames[0]
+		}
+		f, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+		if err != nil {
+			fmt.Println(err)
+		}
+		//write to the file
+		_, err = fmt.Fprint(f, time.Now().Format("[2006-01-02 15:04:05] "), ctx.ErrorWithStack(), "--------------------------------------------------\n")
+		if err != nil {
+			panic(err.Error())
+		}
+		f.Close()
+	}
+}
+```
+日志文件记录如下
+```shell script
+[2019-12-07 12:25:30] 3层错误堆栈测试,并持久化到 errors.log 文件
+demopro/model.IfCheckIn
+    /go/src/demopro/model/check_in.go:21
+demopro/api.CheckIn
+    /go/src/demopro/api/check_in.go:40
+github.com/gin-gonic/gin.(*Context).Next
+    /go/pkg/mod/github.com/gin-gonic/gin@v1.5.0/context.go:147
+--------------------------------------------------
+```
+## 自定义中间件
+如果我们只是想打印出来,则可以自己定义一个中间件,如下
+```go
+func ErrorLog() HandlerFunc {
+	return func(ctx *ErrorContext) {
+		log.Println(ctx.ErrorWithStack())
+	}
+}
+```
+使用
+```go
+e.NewErrorContext().Use(ErrorLog()).Setlayer(3)
+e.New("自定义中间件测试")
+```
+也可以使用任意多个中间件
+```go
+e.NewErrorContext().Use(xxx(),xxx()).Use(xxx())
+```

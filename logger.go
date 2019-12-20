@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func Log(fileNames ...string) HandlerFunc {
+func LogFile(fileNames ...string) HandlerFunc {
 	return func(ctx *ErrorContext) {
 		var fileName = "./error-statck.log"
 		if len(fileNames) > 0 {
