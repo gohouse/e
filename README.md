@@ -87,7 +87,13 @@ error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError}]
 ```
 error with stack
 ```shell script
-error with stack: only show a custom errors demo, [/go/src/github.com/gohouse/e/examples/demo.go:21, main.testError]
+error msg: only show a custom errors demo
+main.test1112
+    /go/src/github.com/gohouse/e/examples/test.go:20
+main.test111
+    /go/src/github.com/gohouse/e/examples/test.go:16
+main.main
+    /go/src/github.com/gohouse/e/examples/test.go:10
 ```
 
 > 说明: 为了节约内存占用,默认是记录1层堆栈的信息,如果想要更多堆栈层数,只需要在第二个参数设置对应数量即可,如:  
@@ -96,7 +102,7 @@ func testError() e.Error {
 	return e.New("错误了啦 xxx", 3)
 }
 ```
-`err`会记录1层堆栈信息,对应的 stack 为:
+`err`会记录3层堆栈信息,对应的 stack 为:
 ```shell script
 error stack: [{/go/src/github.com/gohouse/e/examples/demo.go 21 main.testError} {/go/src/github.com/gohouse/e/examples/demo.go 11 main.main} {/usr/local/go/src/runtime/proc.go 203 runtime.main}]
 ```
@@ -139,6 +145,14 @@ demopro/api.CheckIn
     /go/src/demopro/api/check_in.go:40
 github.com/gin-gonic/gin.(*Context).Next
     /go/pkg/mod/github.com/gin-gonic/gin@v1.5.0/context.go:147
+--------------------------------------------------
+[2020-02-17 15:42:38] 错误信息实验
+main.test1112
+    /go/src/github.com/gohouse/e/examples/test.go:20
+main.test111
+    /go/src/github.com/gohouse/e/examples/test.go:16
+main.main
+    /go/src/github.com/gohouse/e/examples/test.go:11
 --------------------------------------------------
 ```
 ## 自定义中间件

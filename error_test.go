@@ -35,6 +35,7 @@ func TestError_Error(t *testing.T) {
 	err := New("only show a custom errors demo")
 
 	t.Log(err.Error())
+	fmt.Println("\n",err.ErrorWithStack())
 }
 
 func TestError_ErrorWithStack(t *testing.T) {

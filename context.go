@@ -61,7 +61,7 @@ func (ctx *ErrorContext) Error() string {
 	return ctx.msg
 }
 
-// ErrorWithStack 跟 func (ctx *ErrorContext) Error() string 类似, 包含自定义错误信息和错误堆栈信息
+// ErrorWithStack 跟 func (ctx *ErrorContext) Error() string 类似, 额外包含自定义错误信息和错误堆栈信息
 func (ctx *ErrorContext) ErrorWithStack() string {
 	var msg = ctx.msg
 	for _, item := range ctx.errorStacks {
