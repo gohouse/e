@@ -10,7 +10,7 @@ import (
 func New(text string, depth ...int) *ErrorContext {
 	var dp = NewStores().Getlayer()
 	if len(depth) > 0 {
-		if depth[0]>dp {
+		if depth[0] > dp {
 			dp = depth[0]
 		}
 	}
