@@ -35,6 +35,11 @@ err := e.New("这是错误信息")
 err := e.NewWithError("这是错误信息", error.New("这是原生错误信息"))
 ```
 
+- 从原始错误的返回
+```go
+err := e.NewFromError(error.New("这是原生错误信息"))
+```
+
 ### 获取原生标准错误信息
 ```go
 err.Error()
