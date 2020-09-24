@@ -32,3 +32,11 @@ func NewWithError(msg string, goErr error, depth ...int) *ErrorContext {
 	}
 	return New(msg, depth...)
 }
+
+// NewFromError 初始化原始错误
+func NewFromError(goErr error, depth ...int) *ErrorContext {
+	if goErr != nil {
+		return New(goErr.Error(), depth...)
+	}
+	return nil
+}
